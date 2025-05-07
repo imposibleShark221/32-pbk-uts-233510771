@@ -11,6 +11,16 @@
     {text : "Tidur", status : false}
   ])
 
+  function tambahkan(){
+    let isi = {
+      text : teks.value,
+      status : false
+    }
+
+    lists.value.push(isi)
+    teks.value = ''
+  }
+
 
 </script>
 
@@ -21,7 +31,7 @@
 
 <h2>Daftar Kegiatan</h2>
 <ul>
-  <li v-for="list in lists"> {{ list.id }}. {{ list.text }} : {{ list.status }}
+  <li v-for="list in lists"> {{ list.text }} : {{ list.status }}
   </li>
 </ul>
 
