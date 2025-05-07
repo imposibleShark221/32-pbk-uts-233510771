@@ -6,9 +6,9 @@
   const teks = ref('')
 
   const lists = ref([
-    {text : "Olahraga", status : true},
-    {text : "Makan" , status : true},
-    {text : "Tidur", status : false}
+    {text : "Olahraga", status : false, waktu: new Date().toLocaleString(), waktuSelesai: ''},
+    {text : "Makan" , status : false, waktu: new Date().toLocaleString(), waktuSelesai: ''},
+    {text : "Tidur", status : false, waktu: new Date().toLocaleString(), waktuSelesai: ''}
   ])
 
   const filterStatus = ref('all')
@@ -27,18 +27,35 @@
   const countUndone = computed(() => lists.value.filter(item => item.status === false).length)
   const countAll = computed(() => lists.value.length)
 
+  const waktu = ref(new Date().toLocaleTimeString())
+
+  onMounted(() => {
+    setInterval(() => {
+      waktu.value = new Date().toLocaleTimeString()
+    }, 1000)
+  })
+  
   function tambahkan(){
     let isi = {
       text : teks.value,
-      status : false
+      status : false,
+      waktu: new Date().toLocaleString(),
+      waktuSelesai: ''
     }
-
     lists.value.push(isi)
     teks.value = ''
   }
 
   function hapus(index) {
     lists.value.splice(index, 1)
+  }
+
+  function onStatusChange(list) {
+    if (list.status) {
+      list.waktuSelesai = new Date().toLocaleString()
+    } else {
+      list.waktuSelesai = ''
+    }
   }
 
   const selesai = computed(() => {
@@ -65,16 +82,19 @@
     <ul>
       <li v-for="(list, index) in filteredLists" :key="index">
         <span :class="{ crossed: list.status }">{{ list.text }}</span>
-        <input type="checkbox" v-model="list.status">
+        <span> (Added: {{ list.waktu }})</span>
+        <span v-if="list.waktuSelesai"> (Done at: {{ list.waktuSelesai }})</span>
+        <input type="checkbox" v-model="list.status" @change="onStatusChange(list)">
         <button v-on:click="hapus(index)">X</button>
       </li>
     </ul>
-
+    <div>
+      <h3>{{ waktu }}</h3>
+    </div>
 </template>
 
 
 <style scoped>
-
 .crossed {
   text-decoration: line-through;
 }
