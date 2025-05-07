@@ -23,6 +23,10 @@
     }
   })
 
+  const countDone = computed(() => lists.value.filter(item => item.status === true).length)
+  const countUndone = computed(() => lists.value.filter(item => item.status === false).length)
+  const countAll = computed(() => lists.value.length)
+
   function tambahkan(){
     let isi = {
       text : teks.value,
@@ -54,9 +58,9 @@
 
   <h2>Daftar Kegiatan</h2>
   <div>
-    <button v-on:click="filterStatus = 'all'">All</button>
-    <button v-on:click="filterStatus = 'done'">Done</button>
-    <button v-on:click="filterStatus = 'undone'">Undone</button>
+    <button v-on:click="filterStatus = 'all'">All: {{ countAll }}</button>
+    <button v-on:click="filterStatus = 'done'">Done: {{ countDone }}</button>
+    <button v-on:click="filterStatus = 'undone'">Undone: {{ countUndone }}</button>
   </div>
     <ul>
       <li v-for="(list, index) in filteredLists" :key="index">
