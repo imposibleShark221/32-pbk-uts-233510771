@@ -35,6 +35,7 @@
 <h2>Daftar Kegiatan</h2>
   <ul>
     <li v-for="(list, index) in lists" :key="index">{{ list.text }}
+      <input type="checkbox" v-model="list.status">
       <button v-on:click="hapus(index)">X</button>
     </li>
   </ul>
