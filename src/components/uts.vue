@@ -34,7 +34,8 @@
 
 <h2>Daftar Kegiatan</h2>
   <ul>
-    <li v-for="(list, index) in lists" :key="index">{{ list.text }}
+    <li v-for="(list, index) in lists" :key="index">
+      <span :class="{ crossed: list.status }">{{ list.text }}</span>
       <input type="checkbox" v-model="list.status">
       <button v-on:click="hapus(index)">X</button>
     </li>
@@ -46,4 +47,7 @@
 
 <style scoped>
 
+.crossed {
+  text-decoration: line-through;
+}
 </style>
