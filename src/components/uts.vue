@@ -21,6 +21,9 @@
     teks.value = ''
   }
 
+  function hapus(index) {
+    lists.value.splice(index, 1)
+  }
 
 </script>
 
@@ -30,10 +33,11 @@
 <button v-on:click="tambahkan" :disabled="teks == ''">submit</button>
 
 <h2>Daftar Kegiatan</h2>
-<ul>
-  <li v-for="list in lists"> {{ list.text }} : {{ list.status }}
-  </li>
-</ul>
+  <ul>
+    <li v-for="(list, index) in lists" :key="index">{{ list.text }}
+      <button v-on:click="hapus(index)">X</button>
+    </li>
+  </ul>
 
 
 </template>
