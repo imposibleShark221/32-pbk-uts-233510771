@@ -11,6 +11,18 @@
     {text : "Tidur", status : false}
   ])
 
+  const filterStatus = ref('all')
+
+  const filteredLists = computed(() => {
+    if (filterStatus.value === 'done') {
+      return lists.value.filter(item => item.status === true)
+    } else if (filterStatus.value === 'undone') {
+      return lists.value.filter(item => item.status === false)
+    } else {
+      return lists.value
+    }
+  })
+
   function tambahkan(){
     let isi = {
       text : teks.value,
@@ -25,6 +37,14 @@
     lists.value.splice(index, 1)
   }
 
+  const selesai = computed(() => {
+    return lists.value.filter((x) => x.status == true)
+  })
+
+  const belum = computed(() => {
+    return lists.value.filter((x) => x.status == false)
+  })
+
 </script>
 
 <template>
@@ -32,15 +52,19 @@
 <input type="text" v-model="teks">
 <button v-on:click="tambahkan" :disabled="teks == ''">submit</button>
 
-<h2>Daftar Kegiatan</h2>
-  <ul>
-    <li v-for="(list, index) in lists" :key="index">
-      <span :class="{ crossed: list.status }">{{ list.text }}</span>
-      <input type="checkbox" v-model="list.status">
-      <button v-on:click="hapus(index)">X</button>
-    </li>
-  </ul>
-
+  <h2>Daftar Kegiatan</h2>
+  <div>
+    <button v-on:click="filterStatus = 'all'">All</button>
+    <button v-on:click="filterStatus = 'done'">Done</button>
+    <button v-on:click="filterStatus = 'undone'">Undone</button>
+  </div>
+    <ul>
+      <li v-for="(list, index) in filteredLists" :key="index">
+        <span :class="{ crossed: list.status }">{{ list.text }}</span>
+        <input type="checkbox" v-model="list.status">
+        <button v-on:click="hapus(index)">X</button>
+      </li>
+    </ul>
 
 </template>
 
