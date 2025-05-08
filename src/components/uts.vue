@@ -31,6 +31,8 @@
   const minuteAngle = ref(0)
   const secondAngle = ref(0)
 
+  const isDarkMode = ref(false)
+
   function updateClockAngles() {
     const now = new Date()
     const seconds = now.getSeconds()
@@ -42,12 +44,20 @@
     hourAngle.value = hours * 30 + minutes * 0.5
   }
 
+  function updateTheme() {
+    const hour = new Date().getHours()
+    isDarkMode.value = hour < 6 || hour >= 18
+  }
+
   onMounted(() => {
     setInterval(() => {
       waktu.value = new Date().toLocaleTimeString()
       updateClockAngles()
     }, 1000)
     updateClockAngles()
+
+    updateTheme()
+    setInterval(updateTheme, 60000) // update theme every minute
   })
 
   function tambahkan(){
@@ -75,8 +85,8 @@
 </script>
 
 <template>
-<div class="background"></div>
-<div class="container">
+<div :class="[{dark: isDarkMode}, 'background']"></div>
+<div :class="[{dark: isDarkMode}, 'container']">
   <div class="input-submit-container">
     <input type="text" v-model="teks" placeholder="Add new activity...">
     <button v-on:click="tambahkan" :disabled="teks == ''">Submit</button>
@@ -151,6 +161,15 @@
     z-index: 1;
   }
 
+  .dark.background {
+    background-color: #2b2b2b;
+  }
+
+  .dark.container {
+    background-color: #3f3f3f;
+    box-shadow: 0 20px 30px rgba(5, 5, 5, 0.7);
+  }
+
   .input-submit-container {
     display: flex;
     align-items: center;
@@ -190,6 +209,20 @@
     transition: box-shadow 0.3s ease;
   }
 
+  .dark li {
+    background-color: #353535;
+    margin-bottom: 12px;
+    padding: 14px 18px;
+    border-radius: 16px;
+    display: flex;
+    color: rgb(226, 226, 226);
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: box-shadow 0.3s ease;
+  }
+
 
   input[type="text"] {
     width: 70%;
@@ -220,8 +253,15 @@
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
   }
 
+  .dark button {
+    background-color: #404142;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
   button:disabled {
-    background-color: #b0b8c1;
+    background-color: #b7bbc0;
     cursor: not-allowed;
     box-shadow: none;
   }
@@ -231,6 +271,10 @@
     box-shadow: 0 6px 12px rgba(90,122,163,0.4);
   }
 
+  .dark button:hover:not(:disabled) {
+    background-color: #212222;
+    box-shadow: 0 6px 12px rgba(3, 3, 3, 0.4);
+  }
   .input-submit-container {
     display: flex;
     align-items: center;
@@ -259,6 +303,13 @@
     color: #3a4a6b;
   }
 
+  .dark h2 {
+    margin-top: 20px;
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+    color: #b8b8b8;
+  }
+
   .filter-buttons {
     display: flex;
     justify-content: center;
@@ -278,9 +329,26 @@
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
   }
 
+  .dark .filter-buttons > button {
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #383838;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
   .filter-buttons > button:hover {
     background-color: #7a8db3;
     box-shadow: 0 4px 8px rgba(122,141,179,0.4);
+  }
+
+  .dark .filter-buttons > button:hover {
+    background-color: #1b1c1f;
+    box-shadow: 0 4px 8px rgba(11, 12, 15, 0.4);
   }
 
   ul {
@@ -310,6 +378,10 @@
     flex-grow: 1;
     margin-left: 12px;
     color: #4a5a7a;
+  }
+
+  .dark li span {
+    color: #a0a0a0;
   }
 
   .crossed {
@@ -366,7 +438,14 @@
   }
   .done-text {
     font-weight: 600;
-    color: #3a4a6b;
+    color: #6aca6f;
+    margin-bottom: 4px;
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .done-text {
+    font-weight: 600;
+    color: #60dd5b;
     margin-bottom: 4px;
     font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
